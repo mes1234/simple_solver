@@ -1,7 +1,7 @@
-import { MassFlow } from "../preconfigured/massflow"
-import { Pressure } from "../preconfigured/pressure";
-import { Vertex, VertexType } from "../types/vertex";
-import { Link } from "../types/link";
+import { MassFlow } from "../src/preconfigured/massflow"
+import { Pressure } from "../src/preconfigured/pressure";
+import { Vertex, VertexType } from "../src/types/vertex";
+import { Link } from "../src/types/link";
 import { expect } from "chai";
 
 describe("Vertex", () => {

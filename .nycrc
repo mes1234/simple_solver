@@ -3,10 +3,7 @@
   "lines": 70,
   "statements": 70,
   "include": [
-    "index.ts"
-  ],
-  "exclude": [
-    "index.test.ts"
+    "src/**/*.ts"
   ],
   "extension": [
     ".ts"
@@ -15,5 +12,10 @@
     "html",
     "lcov"
   ],
-  "all": true
+  "all": true,
+  "require": [
+    "ts-node/register",
+    "source-map-support/register"
+  ],
+  "spec": "/test/**/*.ts"
 }
