@@ -4,6 +4,7 @@ import { Link } from "./link";
 
 export class Vertex<T extends IntensiveQuantity, U extends ExtensiveQuantity> {
     private _value: T;
+    private _valueNext: T;
 
     private _balance: U;
 
@@ -47,6 +48,14 @@ export class Vertex<T extends IntensiveQuantity, U extends ExtensiveQuantity> {
         }
 
         return this._balance;
+    }
+
+    public get Value(): T {
+        return this._value;
+    }
+
+    public set Value(value: T) {
+        this._valueNext = value;
     }
 }
 
