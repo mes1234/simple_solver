@@ -5,6 +5,7 @@ import { Link } from "./link";
 export class Vertex<T extends IntensiveQuantity, U extends ExtensiveQuantity> {
     private _value: T;
     private _valueNext: T;
+    private _epsilon = 0.0001;
 
     private _balance: U;
 
@@ -12,6 +13,7 @@ export class Vertex<T extends IntensiveQuantity, U extends ExtensiveQuantity> {
 
     constructor(intensiveQuantity: { new(): T }, extensiveQuantity: { new(): U }) {
         this._value = new intensiveQuantity();
+        this._valueNext = this._value;
         this._balance = new extensiveQuantity();
 
         this._type = VertexType.Intermediate;
@@ -50,8 +52,14 @@ export class Vertex<T extends IntensiveQuantity, U extends ExtensiveQuantity> {
         return this._balance;
     }
 
+    public get IsBalanced(): boolean { return Math.abs(this.Balance.amount) < this._epsilon; }
+
     public get Value(): T {
         return this._value;
+    }
+
+    public Adjust() {
+        this._value.amount = this._value.amount - (this._value.amount - this._valueNext.amount) * 0.1;
     }
 
     public set Value(value: T) {

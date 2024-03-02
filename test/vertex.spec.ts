@@ -13,7 +13,7 @@ describe("Vertex", () => {
 });
 
 
-describe("Network", () => {
+describe("Link", () => {
     it("should create a two vericies and link", () => {
         const vertex1 = new Vertex(Pressure, MassFlow);
         const vertex2 = new Vertex(Pressure, MassFlow);
