@@ -1,30 +1,28 @@
-import { ExtensiveQuantity } from "./extensiveQuantity"
-import { IntensiveQuantity } from "./intensiveQuantity";
 import { Link } from "./link";
 
-export class Vertex<T extends IntensiveQuantity, U extends ExtensiveQuantity> {
-    private _value: T;
-    private _valueNext: T;
+export class Vertex {
+    private _value: number;
+    private _valueNext: number;
     private _epsilon = 0.0001;
 
-    private _balance: U;
+    private _linksBalance: number;
 
     private _type: VertexType;
 
-    constructor(intensiveQuantity: { new(): T }, extensiveQuantity: { new(): U }) {
-        this._value = new intensiveQuantity();
+    constructor() {
+        this._value = 0.0;
         this._valueNext = this._value;
-        this._balance = new extensiveQuantity();
+        this._linksBalance = 0.0;
 
         this._type = VertexType.Intermediate;
     }
 
-    public AttachUpstreamLink(link: Link<T, U>) {
+    public AttachUpstreamLink(link: Link) {
         this._Inboundlinks.push(link);
     }
 
 
-    public AttachDownstreamLink(link: Link<T, U>) {
+    public AttachDownstreamLink(link: Link) {
         this._Outboundlinks.push(link);
     }
 
@@ -32,37 +30,37 @@ export class Vertex<T extends IntensiveQuantity, U extends ExtensiveQuantity> {
         this._type = type;
     }
 
-    private _Inboundlinks: Link<T, U>[] = [];
-    private _Outboundlinks: Link<T, U>[] = [];
+    private _Inboundlinks: Link[] = [];
+    private _Outboundlinks: Link[] = [];
 
-    public get Balance(): U {
+    public get Balance(): number {
 
         if (this._type != VertexType.Source) {
             this._Inboundlinks.forEach(link => {
-                this._balance.amount = this._balance.amount + link.Value.amount;
+                this._linksBalance = this._linksBalance + link.Value;
             });
         }
 
         if (this._type != VertexType.Sink) {
             this._Outboundlinks.forEach(link => {
-                this._balance.amount = this._balance.amount - link.Value.amount;
+                this._linksBalance = this._linksBalance - link.Value;
             });
         }
 
-        return this._balance;
+        return this._linksBalance;
     }
 
-    public get IsBalanced(): boolean { return Math.abs(this.Balance.amount) < this._epsilon; }
+    public get IsBalanced(): boolean { return Math.abs(this.Balance) < this._epsilon; }
 
-    public get Value(): T {
+    public get Value(): number {
         return this._value;
     }
 
     public Adjust() {
-        this._value.amount = this._value.amount - (this._value.amount - this._valueNext.amount) * 0.1;
+        this._value = this._value - (this._value - this._valueNext) * 0.1;
     }
 
-    public set Value(value: T) {
+    public set Value(value: number) {
         this._valueNext = value;
     }
 }

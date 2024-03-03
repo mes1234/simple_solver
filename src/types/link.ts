@@ -1,50 +1,41 @@
-import { ExtensiveQuantity } from "./extensiveQuantity";
-import { IntensiveQuantity } from "./intensiveQuantity";
 import { Vertex } from "./vertex";
 
-
-export class Link<T extends IntensiveQuantity, U extends ExtensiveQuantity> {
-    private _value: U;
+export class Link {
+    private _flow: number = 0.0;
 
     private _size = 1.0;
 
-    constructor(type: { new(): U }, upstreamVertex: Vertex<T, U>, downstreamVertex: Vertex<T, U>) {
+    constructor(private _upstreamVertex: Vertex, private _downstreamVertex: Vertex) {
 
-        this._value = new type();
+        this._upstreamVertex.AttachDownstreamLink(this);
 
-        this.upstreamVertex = upstreamVertex;
-
-        this.upstreamVertex.AttachDownstreamLink(this);
-
-        this.downstreamVertex = downstreamVertex;
-
-        this.downstreamVertex.AttachUpstreamLink(this);
+        this._downstreamVertex.AttachDownstreamLink(this);
     }
+    private intensiveFunct?: (intensivenumberpstream: number, intensiveDownstream: number, extensive: number) => number
+    private extensiveFunct?: (intensivenumberpstream: number, intensiveDownstream: number) => number
 
-    private upstreamVertex: Vertex<T, U>;
-    private downstreamVertex: Vertex<T, U>;
-    private intensiveFunct?: (intensiveUpstream: T, intensiveDownstream: T, extensive: U) => T
-    private extensiveFunct?: (intensiveUpstream: T, intensiveDownstream: T) => U
-
-    public AddIntensiveFunction(f: (intensiveUpstream: T, intensiveDownstream: T, extensive: U) => T) {
+    public AddIntensiveFunction(f: (intensivenumberpstream: number, intensiveDownstream: number, extensive: number) => number) {
         this.intensiveFunct = f;
     }
 
-
-    public AddExtensiveFunctions(f: (intensiveUpstream: T, intensiveDownstream: T) => U) {
+    public AddExtensiveFunctions(f: (intensivenumberpstream: number, intensiveDownstream: number) => number) {
         this.extensiveFunct = f;
     }
 
     public Calculate() {
         if (this.intensiveFunct) {
-            this.downstreamVertex.Value = this.intensiveFunct!(this.upstreamVertex.Value, this.downstreamVertex.Value, this._value);
+            this._downstreamVertex.Value = this.intensiveFunct!(this._upstreamVertex.Value, this._downstreamVertex.Value, this._flow);
         }
     }
 
-    public get Value(): U {
+    public get Value(): number {
         if (this.extensiveFunct) {
-            this._value = this.extensiveFunct!(this.upstreamVertex.Value, this.downstreamVertex.Value)
+            this._flow = this.extensiveFunct!(this._upstreamVertex.Value, this._downstreamVertex.Value)
         }
-        return this._value;
+        return this._flow;
+    }
+
+    public set Value(value: number) {
+        this._flow = value;
     }
 }

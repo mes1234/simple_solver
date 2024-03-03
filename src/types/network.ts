@@ -1,18 +1,16 @@
-import { ExtensiveQuantity } from "./extensiveQuantity";
-import { IntensiveQuantity } from "./intensiveQuantity";
 import { Link } from "./link";
 import { Vertex } from "./vertex";
 
-export class Network<T extends IntensiveQuantity, U extends ExtensiveQuantity>  {
-    private _vertices: Vertex<T, U>[] = [];
-    private _links: Link<T, U>[] = [];
+export class Network {
+    private _vertices: Vertex[] = [];
+    private _links: Link[] = [];
     private _epsilon: number = 0.0001;
 
-    public AddVertex(vertex: Vertex<T, U>) {
+    public AddVertex(vertex: Vertex) {
         this._vertices.push(vertex);
     }
 
-    public AddLink(link: Link<T, U>) {
+    public AddLink(link: Link) {
         this._links.push(link);
     }
 

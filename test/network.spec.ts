@@ -1,6 +1,4 @@
 import { expect } from "chai";
-import { MassFlow } from "../src/preconfigured/massflow";
-import { Pressure } from "../src/preconfigured/pressure";
 import { Link } from "../src/types/link";
 import { Vertex, VertexType } from "../src/types/vertex";
 import { Network } from "../src/types/network";
@@ -8,34 +6,27 @@ import { Network } from "../src/types/network";
 
 describe("Network", () => {
     it("should create simple network and iterate", () => {
-        const vertexIn = new Vertex(Pressure, MassFlow);
-        const vertexOut = new Vertex(Pressure, MassFlow);
-        const vertexMid = new Vertex(Pressure, MassFlow);
+        const vertexIn = new Vertex();
+        const vertexOut = new Vertex();
+        const vertexMid = new Vertex();
 
         vertexIn.Type = VertexType.Source;
-        vertexIn.Value.amount = 100;
+        vertexIn.Value = 100;
         vertexOut.Type = VertexType.Sink;
         vertexMid.Type = VertexType.Intermediate;
 
-        const link1 = new Link(MassFlow, vertexIn, vertexMid);
-        const link2 = new Link(MassFlow, vertexMid, vertexOut);
+        const link1 = new Link(vertexIn, vertexMid);
+        const link2 = new Link(vertexMid, vertexOut);
 
-        link1.Value.amount = 10;
+        link1.Value = 10;
 
-        const intensiveFunc = (upstream: Pressure, downstream: Pressure, extensive: MassFlow): Pressure => {
-            const p = new Pressure();
+        const intensiveFunc = (upstream: number, downstream: number, extensive: number): number => {
 
-            p.amount = upstream.amount - downstream.amount;
-
-            return p;
+            return upstream - downstream;
         }
 
-        const extensiveFunc = (upstream: Pressure, downstream: Pressure): MassFlow => {
-            const p = new MassFlow();
-
-            p.amount = (upstream.amount - downstream.amount) / 100.0;
-
-            return p;
+        const extensiveFunc = (upstream: number, downstream: number): number => {
+            return (upstream - downstream) / 100.0;
         }
 
         link1.AddIntensiveFunction(intensiveFunc);
