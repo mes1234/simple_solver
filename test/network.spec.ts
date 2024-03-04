@@ -11,14 +11,15 @@ describe("Network", () => {
         const vertexMid = new Vertex();
 
         vertexIn.Type = VertexType.Source;
-        vertexIn.Value = 100;
+        vertexIn.SetValue(100);
         vertexOut.Type = VertexType.Sink;
         vertexMid.Type = VertexType.Intermediate;
+
 
         const link1 = new Link(vertexIn, vertexMid);
         const link2 = new Link(vertexMid, vertexOut);
 
-        link1.Value = 10;
+        link1.SetValue(10);
 
         const intensiveFunc = (upstream: number, downstream: number, extensive: number): number => {
 

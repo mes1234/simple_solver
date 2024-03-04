@@ -1,17 +1,16 @@
+import { IterativeElement } from "./iterativeElement";
 import { Link } from "./link";
 
-export class Vertex {
-    private _value: number;
-    private _valueNext: number;
-    private _epsilon = 0.0001;
+export class Vertex extends IterativeElement {
+    [x: string]: any;
 
     private _linksBalance: number;
 
     private _type: VertexType;
 
-    constructor() {
-        this._value = 0.0;
-        this._valueNext = this._value;
+    constructor(value?: number) {
+        super(value);
+
         this._linksBalance = 0.0;
 
         this._type = VertexType.Intermediate;
@@ -37,13 +36,13 @@ export class Vertex {
 
         if (this._type != VertexType.Source) {
             this._Inboundlinks.forEach(link => {
-                this._linksBalance = this._linksBalance + link.Value;
+                this._linksBalance = this._linksBalance + link.GetValue();
             });
         }
 
         if (this._type != VertexType.Sink) {
             this._Outboundlinks.forEach(link => {
-                this._linksBalance = this._linksBalance - link.Value;
+                this._linksBalance = this._linksBalance - link.GetValue();
             });
         }
 
@@ -52,17 +51,6 @@ export class Vertex {
 
     public get IsBalanced(): boolean { return Math.abs(this.Balance) < this._epsilon; }
 
-    public get Value(): number {
-        return this._value;
-    }
-
-    public Adjust() {
-        this._value = this._value - (this._value - this._valueNext) * 0.1;
-    }
-
-    public set Value(value: number) {
-        this._valueNext = value;
-    }
 }
 
 export enum VertexType {
