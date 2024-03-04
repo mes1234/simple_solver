@@ -19,6 +19,7 @@ export class Network {
 
         while (keepGoing) {
             this._vertices.forEach(vertex => { vertex.Flip(); })
+            this._links.forEach(link => { link.Flip(); })
             this._links.forEach(link => { link.Calculate(); })
             keepGoing = this._vertices.some(vertex => !vertex.IsBalanced);
 
