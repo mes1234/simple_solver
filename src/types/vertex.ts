@@ -29,27 +29,28 @@ export class Vertex extends IterativeElement {
         this._type = type;
     }
 
+    public get Type(): VertexType {
+        return this._type;
+    }
+
     private _Inboundlinks: Link[] = [];
     private _Outboundlinks: Link[] = [];
 
     public get Balance(): number {
+        const input = this._Inboundlinks.reduce((sum, link) => sum + link.GetValue(), 0);
+        const output = this._Outboundlinks.reduce((sum, link) => sum + link.GetValue(), 0);
 
-        if (this._type != VertexType.Source) {
-            this._Inboundlinks.forEach(link => {
-                this._linksBalance = this._linksBalance + link.GetValue();
-            });
-        }
-
-        if (this._type != VertexType.Sink) {
-            this._Outboundlinks.forEach(link => {
-                this._linksBalance = this._linksBalance - link.GetValue();
-            });
-        }
+        this._linksBalance = input - output;
 
         return this._linksBalance;
     }
 
-    public get IsBalanced(): boolean { return Math.abs(this.Balance) < this._epsilon; }
+    public get IsBalanced(): boolean {
+        // Source and sink vertices are always balanced
+        if (this._type != VertexType.Intermediate) return true;
+
+        return Math.abs(this.Balance) < this._epsilon;
+    }
 
 }
 

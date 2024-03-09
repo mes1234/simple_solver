@@ -10,18 +10,18 @@ export class Link extends IterativeElement {
 
         super(value);
 
-        this._upstreamVertex.AttachDownstreamLink(this);
+        this._upstreamVertex.AttachUpstreamLink(this);
 
         this._downstreamVertex.AttachDownstreamLink(this);
     }
 
     // Function to estimate downstream vertex value
-    private intensiveFunct?: (intensivenumberpstream: number, intensiveDownstream: number, extensive: number) => number
+    private intensiveFunct?: (intensivenumberpstream: number, extensive: number) => number
 
     // Function to estimate flow value
     private extensiveFunct?: (intensivenumberpstream: number, intensiveDownstream: number) => number
 
-    public AddIntensiveFunction(f: (intensivenumberpstream: number, intensiveDownstream: number, extensive: number) => number) {
+    public AddIntensiveFunction(f: (intensivenumberpstream: number, extensive: number) => number) {
         this.intensiveFunct = f;
     }
 
@@ -30,8 +30,8 @@ export class Link extends IterativeElement {
     }
 
     public Calculate() {
-        if (this.intensiveFunct) {
-            this._downstreamVertex.SetValue(this.intensiveFunct!(this._upstreamVertex.GetValue(), this._downstreamVertex.GetValue(), this.GetValue()));
+        if (this.intensiveFunct && this._downstreamVertex.Type != "Sink" && this._downstreamVertex.Type != "Source") {
+            this._downstreamVertex.SetValue(this.intensiveFunct!(this._upstreamVertex.GetValue(), this.GetValue()));
         }
         if (this.extensiveFunct) {
             this.SetValue(this.extensiveFunct(this._upstreamVertex.GetValue(), this._downstreamVertex.GetValue()));

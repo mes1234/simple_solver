@@ -21,8 +21,16 @@ export class Network {
             this._vertices.forEach(vertex => { vertex.Flip(); })
             this._links.forEach(link => { link.Flip(); })
             this._links.forEach(link => { link.Calculate(); })
-            keepGoing = this._vertices.some(vertex => !vertex.IsBalanced);
+            keepGoing = !this._vertices.every(vertex => vertex.IsBalanced);
 
         }
+    }
+
+    public get VerticesStatus(): string {
+        return this._vertices.map(vertex => vertex.GetValue().toString()).join(', ');
+    }
+
+    public get LinksStatus(): string {
+        return this._links.map(vertex => vertex.GetValue().toString()).join(', ');
     }
 }

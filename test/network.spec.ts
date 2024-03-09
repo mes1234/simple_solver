@@ -11,23 +11,26 @@ describe("Network", () => {
         const vertexMid = new Vertex();
 
         vertexIn.Type = VertexType.Source;
-        vertexIn.SetValue(100);
+        vertexIn.SetValue(10);
         vertexOut.Type = VertexType.Sink;
         vertexMid.Type = VertexType.Intermediate;
 
 
         const link1 = new Link(vertexIn, vertexMid);
+        link1.SetValue(-1.01);
         const link2 = new Link(vertexMid, vertexOut);
+        link1.SetValue(0.02);
 
-        link1.SetValue(10);
+        const intensiveFunc = (upstream: number, extensive: number): number => {
+            const result = upstream - extensive * extensive * 1000 / 2
 
-        const intensiveFunc = (upstream: number, downstream: number, extensive: number): number => {
-
-            return upstream - downstream;
+            return result;
         }
 
         const extensiveFunc = (upstream: number, downstream: number): number => {
-            return (upstream - downstream) / 100.0;
+            const result = Math.sqrt(2 * (upstream - downstream) / 1000.0);
+
+            return result;
         }
 
         link1.AddIntensiveFunction(intensiveFunc);
