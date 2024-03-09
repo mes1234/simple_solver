@@ -18,9 +18,15 @@ export class Network {
         let keepGoing = true;
 
         while (keepGoing) {
+            // Calculate the links
+            this._links.forEach(link => { link.Calculate(); })
+
+            // Assign new values
+            // TODO this is wrong, there should be some adjustment added here based on balance
             this._vertices.forEach(vertex => { vertex.Flip(); })
             this._links.forEach(link => { link.Flip(); })
-            this._links.forEach(link => { link.Calculate(); })
+
+            // Check balance
             keepGoing = !this._vertices.every(vertex => vertex.IsBalanced);
 
         }

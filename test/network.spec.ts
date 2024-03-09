@@ -1,34 +1,42 @@
-import { expect } from "chai";
 import { Link } from "../src/types/link";
-import { Vertex, VertexType } from "../src/types/vertex";
+import { Vertex } from "../src/types/vertex";
 import { Network } from "../src/types/network";
+import { ElementType } from "../src/types/iterativeElement";
 
 
 describe("Network", () => {
     it("should create simple network and iterate", () => {
-        const vertexIn = new Vertex();
-        const vertexOut = new Vertex();
-        const vertexMid = new Vertex();
+        const vertexIn = new Vertex(10);
+        const vertexOut = new Vertex(0.1);
+        const vertexMid = new Vertex(1);
 
-        vertexIn.Type = VertexType.Source;
-        vertexIn.SetValue(10);
-        vertexOut.Type = VertexType.Sink;
-        vertexMid.Type = VertexType.Intermediate;
+        vertexIn.Type = ElementType.Source;
+        vertexOut.Type = ElementType.Sink;
+        vertexMid.Type = ElementType.Intermediate;
+
+        const rho = 1000;
+        const fd = 0.02;
 
 
-        const link1 = new Link(vertexIn, vertexMid);
-        link1.SetValue(-1.01);
-        const link2 = new Link(vertexMid, vertexOut);
-        link1.SetValue(0.02);
 
-        const intensiveFunc = (upstream: number, extensive: number): number => {
-            const result = upstream - extensive * extensive * 1000 / 2
+        const link1 = new Link(vertexIn, vertexMid, 6);
+        const link2 = new Link(vertexMid, vertexOut, -6);
 
-            return result;
+        const intensiveFunc = (upstream: number, extensive: number, dh: number, L: number): number => {
+
+            const crossSection = Math.PI * Math.pow(dh, 2) / 4;
+
+            const downstream = upstream - fd * L * rho / 2 * extensive * extensive / dh / crossSection;
+
+            return Math.max(downstream, 0);
         }
 
-        const extensiveFunc = (upstream: number, downstream: number): number => {
-            const result = Math.sqrt(2 * (upstream - downstream) / 1000.0);
+        const extensiveFunc = (upstream: number, downstream: number, dh: number, L: number): number => {
+            const crossSection = Math.PI * Math.pow(dh, 2) / 4;
+
+            const result = (upstream > downstream)
+                ? crossSection * Math.sqrt(2 * (upstream - downstream) / rho / L / fd * dh)
+                : -crossSection * Math.sqrt(2 * (downstream - upstream) / rho / L / fd * dh);
 
             return result;
         }
@@ -42,8 +50,8 @@ describe("Network", () => {
         const network = new Network()
 
         network.AddVertex(vertexIn);
-        network.AddVertex(vertexOut);
         network.AddVertex(vertexMid);
+        network.AddVertex(vertexOut);
         network.AddLink(link1);
         network.AddLink(link2);
 

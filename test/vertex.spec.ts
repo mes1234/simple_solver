@@ -1,11 +1,12 @@
 
-import { Vertex, VertexType } from "../src/types/vertex";
+import { Vertex } from "../src/types/vertex";
 import { Link } from "../src/types/link";
+import { ElementType } from "../src/types/iterativeElement";
 import { expect } from "chai";
 
 describe("Vertex", () => {
     it("should create a new vertes", () => {
-        const vertex = new Vertex();
+        const vertex = new Vertex(0);
 
         expect(vertex).to.be.instanceOf(Vertex);
     })
@@ -14,13 +15,13 @@ describe("Vertex", () => {
 
 describe("Link", () => {
     it("should create a two vericies and link", () => {
-        const vertex1 = new Vertex();
-        const vertex2 = new Vertex();
+        const vertex1 = new Vertex(0);
+        const vertex2 = new Vertex(0);
 
-        vertex1.Type = VertexType.Source;
-        vertex2.Type = VertexType.Sink;
+        vertex1.Type = ElementType.Source;
+        vertex2.Type = ElementType.Sink;
 
-        const link = new Link(vertex1, vertex2);
+        const link = new Link(vertex1, vertex2, 0);
 
         expect(link).to.be.instanceOf(Link);
 
