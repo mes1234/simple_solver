@@ -1,10 +1,10 @@
-import { IterativeElement } from "./iterativeElement";
+import { ExtensiveFunc, IntensiveFunc, IterativeElement } from "./iterativeElement";
 import { Vertex } from "./vertex";
 
 export class Link extends IterativeElement {
 
-    private _dh = 1.0;
-    private _L = 1.0;
+    dh = 1.0;
+    L = 1.0;
 
     constructor(private _upstreamVertex: Vertex, private _downstreamVertex: Vertex, value: number) {
 
@@ -16,16 +16,16 @@ export class Link extends IterativeElement {
     }
 
     // Function to estimate downstream vertex value
-    private intensiveFunct?: (intensivenumberpstream: number, extensive: number, dh: number, L: number) => number
+    private intensiveFunct?: IntensiveFunc;
 
     // Function to estimate flow value
-    private extensiveFunct?: (intensivenumberpstream: number, intensiveDownstream: number, dh: number, L: number) => number
+    private extensiveFunct?: ExtensiveFunc;
 
-    public AddIntensiveFunction(f: (intensivenumberpstream: number, extensive: number, dh: number, L: number) => number) {
+    public AddIntensiveFunction(f: IntensiveFunc) {
         this.intensiveFunct = f;
     }
 
-    public AddExtensiveFunctions(f: (intensivenumberpstream: number, intensiveDownstream: number, dh: number, L: number) => number) {
+    public AddExtensiveFunctions(f: ExtensiveFunc) {
         this.extensiveFunct = f;
     }
 
@@ -33,10 +33,10 @@ export class Link extends IterativeElement {
         if (this.intensiveFunct &&
             this._downstreamVertex.Type != "Sink" &&
             this._downstreamVertex.Type != "Source") {
-            this._downstreamVertex.SetValue(this.intensiveFunct!(this._upstreamVertex.GetValue(), this.GetValue(), this._dh, this._L));
+            this._downstreamVertex.SetValue(this.intensiveFunct!(this._upstreamVertex, this));
         }
         if (this.extensiveFunct) {
-            this.SetValue(this.extensiveFunct(this._upstreamVertex.GetValue(), this._downstreamVertex.GetValue(), this._dh, this._L));
+            this.SetValue(this.extensiveFunct(this._upstreamVertex, this._downstreamVertex, this));
         }
     }
 }

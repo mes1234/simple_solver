@@ -1,3 +1,6 @@
+import { Link } from "./link";
+import { Vertex } from "./vertex";
+
 export abstract class IterativeElement {
 
     protected _value: number;
@@ -56,3 +59,6 @@ export enum ElementType {
     Sink = "Sink",
     Intermediate = "Intermediate"
 }
+
+export type IntensiveFunc = (upstream: Vertex, link: Link) => number;
+export type ExtensiveFunc = (upstream: Vertex, downstream: Vertex, link: Link) => number;
