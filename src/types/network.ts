@@ -4,10 +4,13 @@ import { Vertex } from "./vertex";
 export class Network {
     private _vertices: Vertex[] = [];
     private _links: Link[] = [];
-    private _epsilon: number = 0.0001;
+
+    public Epsilon: number = 0.001;
+    public Iterations: number = 0;
 
     public AddVertex(vertex: Vertex) {
         this._vertices.push(vertex);
+        vertex.Epsilon = this.Epsilon;
     }
 
     public AddLink(link: Link) {
@@ -17,26 +20,27 @@ export class Network {
     public Calculate() {
         let keepGoing = true;
 
+        this.Iterations = 0;
+
         while (keepGoing) {
             // Calculate the links
-            this._links.forEach(link => { link.Calculate(); })
+            this._links.forEach(link => { link.Calculate(); });
 
             // Assign new values
-            // TODO this is wrong, there should be some adjustment added here based on balance
-            this._vertices.forEach(vertex => { vertex.Flip(); })
-            this._links.forEach(link => { link.Flip(); })
+            this._vertices.forEach(vertex => { vertex.Adjust(); })
 
             // Check balance
             keepGoing = !this._vertices.every(vertex => vertex.IsBalanced);
 
+            this.Iterations++;
         }
     }
 
     public get VerticesStatus(): string {
-        return this._vertices.map(vertex => vertex.GetValue().toString()).join(', ');
+        return this._vertices.map(vertex => vertex.Value.toString()).join(', ');
     }
 
     public get LinksStatus(): string {
-        return this._links.map(vertex => vertex.GetValue().toString()).join(', ');
+        return this._links.map(vertex => vertex.Value.toString()).join(', ');
     }
 }
