@@ -7,6 +7,9 @@
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
+    "lib": [
+      "ES2015"
+    ],
     "types": [
       "mocha",
       "chai",

@@ -37,7 +37,9 @@ export class ValueStabilityAnalyzer {
 
         const variance = this.buffer.reduce((a, b) => a + Math.pow(b - avg, 2), 0) / this.buffer.length;
 
-        return variance > 0.1;
+        const fluctuationTooHigh = variance / avg > 0.1
+
+        return fluctuationTooHigh;
     }
 
     isMonotonic(array: number[]): boolean {

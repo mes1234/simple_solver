@@ -21,7 +21,6 @@ export class Vertex extends IterativeElement {
         this._Inboundlinks.push(link);
     }
 
-
     public AttachDownstreamLink(link: Link) {
         this._Outboundlinks.push(link);
     }
@@ -54,8 +53,8 @@ export class Vertex extends IterativeElement {
 
         var adjustmentFactor = this.Balance / (Math.abs(this.InboundFlow) + Math.abs(this.OutboundFlow));
 
-        if (adjustmentFactor > 1) return 0.99;
-        if (adjustmentFactor < -1) return -0.99;
+        if (adjustmentFactor >= 1) return 0.99;
+        if (adjustmentFactor <= -1) return -0.99;
 
         return adjustmentFactor;
     }
@@ -76,6 +75,13 @@ export class Vertex extends IterativeElement {
 
     public Adjust(): void {
         if (this.Type != VertexType.Intermediate) return;
+
+        // Don't adjust if this vertext is already balanced
+        // and speed it up for next iterations if needed
+        if (this.IsBalanced) {
+            this._stabilityAdjustment = 1;
+            return
+        }
 
         this.CalculateStabilityAdjustment();
 
