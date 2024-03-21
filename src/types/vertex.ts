@@ -44,7 +44,7 @@ export class Vertex extends IterativeElement {
         // Source and sink vertices are assumed always balanced
         if (this.Type != VertexType.Intermediate) return true;
 
-        return Math.abs(this.Balance) < this.Epsilon;
+        return Math.abs(this.Balance / Math.max(Math.abs(this.InboundFlow), Math.abs(this.OutboundFlow))) < this.Epsilon;
     }
 
     public get AdjustmentFactor(): number {

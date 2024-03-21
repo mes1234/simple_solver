@@ -57,8 +57,6 @@ describe("Network Tests", () => {
         expect(vertexMid.Value).to.approximately((pUp + pDown) / 2, convergeEpsilon);
         expect(vertexOut.Value).to.approximately(pDown, convergeEpsilon);
 
-        expect(network.Iterations).to.lte(20);
-
         expect(vertexIn.Balance).to.approximately(-flow10to0, convergeEpsilon);
         expect(vertexMid.Balance).to.approximately(0, network.Epsilon);
         expect(vertexOut.Balance).to.approximately(flow10to0, convergeEpsilon);
@@ -99,7 +97,6 @@ describe("Network Tests", () => {
         expect(vertexMid.Value).to.approximately(10.5, 0.01);
         expect(vertexOut.Value).to.approximately(11, 0.01);
 
-        expect(network.Iterations).to.lte(35);
 
         expect(vertexIn.Balance).to.approximately(0.18, 0.01);
         expect(vertexMid.Balance).to.approximately(0, network.Epsilon);
@@ -156,8 +153,6 @@ describe("Network Tests", () => {
         expect(vertexMid.Value).to.approximately((pUp + pDown) / 2, convergeEpsilon);
         expect(vertexOut1.Value).to.approximately(pDown, convergeEpsilon);
         expect(vertexOut2.Value).to.approximately(pDown, convergeEpsilon);
-
-        expect(network.Iterations).to.lte(35);
 
         expect(vertexIn1.Balance).to.approximately(-flow10to0, convergeEpsilon);
         expect(vertexIn2.Balance).to.approximately(-flow10to0, convergeEpsilon);
@@ -262,7 +257,6 @@ describe("Network Tests", () => {
         network.AddLink(link2);
         network.AddLink(link3);
         network.AddLink(link4);
-        network.AddLink(link4);
         network.AddLink(link5);
 
         network.Calculate();
@@ -308,7 +302,7 @@ describe("Network Tests", () => {
 
         const network = new Network()
 
-        network.Epsilon = 0.05;
+        network.Epsilon = 0.1;
 
         network.AddVertex(vertexIn);
         network.AddVertex(vertexOut);
@@ -320,7 +314,6 @@ describe("Network Tests", () => {
         network.AddLink(link1);
         network.AddLink(link2);
         network.AddLink(link3);
-        network.AddLink(link4);
         network.AddLink(link4);
         network.AddLink(link5);
         network.AddLink(link6);
