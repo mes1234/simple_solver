@@ -35,3 +35,17 @@ export class Link extends IterativeElement {
 }
 
 export type LinkFunction = (upstream: Vertex, downstream: Vertex, link: Link) => number;
+
+const rho = 1000;
+const fd = 0.02;
+
+export const DefaultLinkFunc: LinkFunction = (upstream: Vertex, downstream: Vertex, extensive: Link): number => {
+
+    const crossSection = Math.PI * Math.pow(extensive.dh, 2) / 4;
+
+    const result = (upstream.Value > downstream.Value)
+        ? crossSection * Math.sqrt(2 * (upstream.Value - downstream.Value) / rho / extensive.L / fd * extensive.dh)
+        : -crossSection * Math.sqrt(2 * (downstream.Value - upstream.Value) / rho / extensive.L / fd * extensive.dh);
+
+    return result;
+}

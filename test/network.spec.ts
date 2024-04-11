@@ -1,28 +1,13 @@
-import { Link, LinkFunction } from "../src/types/link";
+import { DefaultLinkFunc, Link, LinkFunction } from "../src/types/link";
 import { Vertex } from "../src/types/vertex";
 import { Network } from "../src/types/network";
 import { expect } from "chai";
 import { VertexType } from "../src/types/VertexType";
 
-const rho = 1000;
-const fd = 0.02;
-
 const flow10to0 = 0.56;
 const convergeEpsilon = 0.01;
 const pUp = 10;
 const pDown = 0;
-
-const func: LinkFunction = (upstream: Vertex, downstream: Vertex, extensive: Link): number => {
-
-    const crossSection = Math.PI * Math.pow(extensive.dh, 2) / 4;
-
-    const result = (upstream.Value > downstream.Value)
-        ? crossSection * Math.sqrt(2 * (upstream.Value - downstream.Value) / rho / extensive.L / fd * extensive.dh)
-        : -crossSection * Math.sqrt(2 * (downstream.Value - upstream.Value) / rho / extensive.L / fd * extensive.dh);
-
-    return result;
-}
-
 
 describe("Network Tests", () => {
     it("should create simple network and iterate", () => {
@@ -37,9 +22,9 @@ describe("Network Tests", () => {
         const link1 = new Link("Link #1", vertexIn, vertexMid, 33);
         const link2 = new Link("Link #2", vertexMid, vertexOut, -1);
 
-        link1.AddFunc(func);
+        link1.AddFunc(DefaultLinkFunc);
 
-        link2.AddFunc(func);
+        link2.AddFunc(DefaultLinkFunc);
 
         const network = new Network()
 
@@ -78,8 +63,8 @@ describe("Network Tests", () => {
         const link1 = new Link("Link #1", vertexIn, vertexMid, 10);
         const link2 = new Link("Link #2", vertexMid, vertexOut, -1);
 
-        link1.AddFunc(func);
-        link2.AddFunc(func);
+        link1.AddFunc(DefaultLinkFunc);
+        link2.AddFunc(DefaultLinkFunc);
 
         const network = new Network()
 
@@ -127,10 +112,10 @@ describe("Network Tests", () => {
         const link4 = new Link("Link #3", vertexMid, vertexOut2, 3);
 
 
-        link1.AddFunc(func);
-        link2.AddFunc(func);
-        link3.AddFunc(func);
-        link4.AddFunc(func);
+        link1.AddFunc(DefaultLinkFunc);
+        link2.AddFunc(DefaultLinkFunc);
+        link3.AddFunc(DefaultLinkFunc);
+        link4.AddFunc(DefaultLinkFunc);
 
         const network = new Network()
 
@@ -187,10 +172,10 @@ describe("Network Tests", () => {
         const link4 = new Link("Link #4", vertexMid3, vertexOut, 1);
 
 
-        link1.AddFunc(func);
-        link2.AddFunc(func);
-        link3.AddFunc(func);
-        link4.AddFunc(func);
+        link1.AddFunc(DefaultLinkFunc);
+        link2.AddFunc(DefaultLinkFunc);
+        link3.AddFunc(DefaultLinkFunc);
+        link4.AddFunc(DefaultLinkFunc);
 
         const network = new Network()
 
@@ -237,11 +222,11 @@ describe("Network Tests", () => {
         const link5 = new Link("Link #4", vertexMid4, vertexOut, 1);
 
 
-        link1.AddFunc(func);
-        link2.AddFunc(func);
-        link3.AddFunc(func);
-        link4.AddFunc(func);
-        link5.AddFunc(func);
+        link1.AddFunc(DefaultLinkFunc);
+        link2.AddFunc(DefaultLinkFunc);
+        link3.AddFunc(DefaultLinkFunc);
+        link4.AddFunc(DefaultLinkFunc);
+        link5.AddFunc(DefaultLinkFunc);
 
         const network = new Network()
 
@@ -293,12 +278,12 @@ describe("Network Tests", () => {
         const link6 = new Link("Link #6", vertexMid5, vertexOut, 1);
 
 
-        link1.AddFunc(func);
-        link2.AddFunc(func);
-        link3.AddFunc(func);
-        link4.AddFunc(func);
-        link5.AddFunc(func);
-        link6.AddFunc(func);
+        link1.AddFunc(DefaultLinkFunc);
+        link2.AddFunc(DefaultLinkFunc);
+        link3.AddFunc(DefaultLinkFunc);
+        link4.AddFunc(DefaultLinkFunc);
+        link5.AddFunc(DefaultLinkFunc);
+        link6.AddFunc(DefaultLinkFunc);
 
         const network = new Network()
 

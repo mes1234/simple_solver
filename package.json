@@ -1,6 +1,6 @@
 {
   "name": "simple_solver",
-  "version": "1.0.0",
+  "version": "1.0.0-alpha.3",
   "description": "simple solver for steady state conditions of network",
   "main": "index.js",
   "directories": {

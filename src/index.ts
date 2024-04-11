@@ -1,5 +1,7 @@
+import { VertexType } from "./types/VertexType";
+import { DefaultLinkFunc, Link } from "./types/link";
+import { Network } from "./types/network";
 import { Vertex } from "./types/vertex";
+ 
 
-// const vertex = new Vertex({ amount: 100 } as IntensiveQuantity);
-
-export { Vertex };
+export { Vertex, VertexType, Link, Network, DefaultLinkFunc };
